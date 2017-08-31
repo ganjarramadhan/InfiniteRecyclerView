@@ -3,17 +3,17 @@ package com.iamtheib.infiniterecyclerview.demo.adapter;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.LinearInterpolator;
-
+import com.iamtheib.infiniterecyclerview.InfiniteAdapter;
+import com.iamtheib.infiniterecyclerview.demo.MainActivityPlus;
 import com.iamtheib.infiniterecyclerview.demo.R;
 import com.iamtheib.infiniterecyclerview.demo.viewholder.DummyViewHolder;
 import com.iamtheib.infiniterecyclerview.demo.viewholder.LoadingViewHolder;
-import com.iamtheib.infiniterecyclerview.InfiniteAdapter;
-
 import java.util.List;
 
 /**
@@ -64,6 +64,11 @@ public class SampleAdapter extends InfiniteAdapter<RecyclerView.ViewHolder> {
         }
         else {
             ((DummyViewHolder) holder).tv.setText(sampleData.get(position));
+          holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+              mContext.startActivity(new Intent(mContext, MainActivityPlus.class));
+            }
+          });
         }
 
         super.onBindViewHolder(holder, position);

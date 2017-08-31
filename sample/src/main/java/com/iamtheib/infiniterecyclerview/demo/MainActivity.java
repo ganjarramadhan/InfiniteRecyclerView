@@ -1,15 +1,13 @@
 package com.iamtheib.infiniterecyclerview.demo;
 
+import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-
 import com.iamtheib.infiniterecyclerview.InfiniteAdapter;
 import com.iamtheib.infiniterecyclerview.demo.adapter.SampleAdapter;
-
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
@@ -17,6 +15,21 @@ public class MainActivity extends AppCompatActivity {
     RecyclerView dummyRV;
     SampleAdapter mSampleAdapter;
     ArrayList<String> mDummyData;
+  private InfiniteAdapter.OnLoadMoreListener mLoadMoreListener =
+      new InfiniteAdapter.OnLoadMoreListener() {
+        @Override public void onLoadMore() {
+          Log.v("Main", "Load more fired");
+
+          final int currSize = mDummyData.size();
+          new Handler().postDelayed(new Runnable() {
+            @Override public void run() {
+              addMoreData();
+              mSampleAdapter.moreDataLoaded(currSize, mDummyData.size() - currSize);
+              //mSampleAdapter.setShouldLoadMore(false);
+            }
+          }, 5000);
+        }
+      };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,23 +46,6 @@ public class MainActivity extends AppCompatActivity {
         dummyRV.setLayoutManager(new LinearLayoutManager(this));
         mSampleAdapter.setOnLoadMoreListener(mLoadMoreListener);
     }
-
-    private InfiniteAdapter.OnLoadMoreListener mLoadMoreListener = new InfiniteAdapter.OnLoadMoreListener() {
-        @Override
-        public void onLoadMore() {
-            Log.v("Main", "Load more fired");
-
-            final int currSize = mDummyData.size();
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    addMoreData();
-                    mSampleAdapter.moreDataLoaded(currSize, mDummyData.size() - currSize);
-                    mSampleAdapter.setShouldLoadMore(false);
-                }
-            }, 5000);
-        }
-    };
 
     private void setupDummyData() {
         mDummyData.add("Text 1");
